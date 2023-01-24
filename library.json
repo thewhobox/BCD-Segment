@@ -1,6 +1,6 @@
 {
     "name": "BCD-Segment",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Controls a BCD to 7-Segment IC. Supports up to 4 digits.",
     "keywords": "bcd, binary, segment, digit",
     "repository":
