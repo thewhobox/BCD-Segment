@@ -12,6 +12,9 @@ void setup()
 
 void loop()
 {
+    //Needed for multiplexing
+    seg.loop();
+    
     //Output 0034
     seg.setNumber(34);
 

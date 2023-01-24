@@ -19,6 +19,7 @@ void Segment::setInputPins(uint8_t a, uint8_t b, uint8_t c, uint8_t d)
 	_pinD = d;
 }
 
+#ifndef NO_DIGIT_PINS
 void Segment::setDigitPins(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
 	pinMode(d0, OUTPUT);
@@ -31,6 +32,7 @@ void Segment::setDigitPins(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 	_digit2 = d2;
 	_digit3 = d3;
 }
+#endif
 
 void Segment::setNumber(int number, bool showZero)
 {
@@ -61,10 +63,12 @@ void Segment::loop()
 {
 	if(_lastDigit + 5 < millis())
 	{
+#ifndef NO_DIGIT_PINS
 		digitalWrite(_digit3, _currentDigit == 3);
 		digitalWrite(_digit2, _currentDigit == 2);
 		digitalWrite(_digit1, _currentDigit == 1);
 		digitalWrite(_digit0, _currentDigit == 0);
+#endif
 
 		int8_t digit = _digits[_currentDigit];
 		if(digit < 0)
