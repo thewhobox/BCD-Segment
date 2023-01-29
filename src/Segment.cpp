@@ -1,35 +1,37 @@
-#include <Arduino.h>
 #include "Segment.h"
 
-Segment::Segment(int digits)
+Segment::Segment(bool useBCD) 
+{
+	_useBCD = useBCD;
+}
+
+Segment::Segment(uint digits, bool useBCD)
 {
 	_digitsCount = digits;
+	_useBCD = useBCD;
 }
 
-void Segment::setInputPins(uint8_t a, uint8_t b, uint8_t c, uint8_t d)
+void Segment::setInputPins(uint8_t *a)
 {
-	pinMode(a, OUTPUT);
-	pinMode(b, OUTPUT);
-	pinMode(c, OUTPUT);
-	pinMode(d, OUTPUT);
+	for(int i = 0; i < 4; i++)
+	{
+		pinMode(a[i], OUTPUT);
+	}
 
-	_pinA = a;
-	_pinB = b;
-	_pinC = c;
-	_pinD = d;
+	_pinsInput = a;
 }
 
-void Segment::setDigitPins(uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
+void Segment::setDigitPins(uint8_t *d)
 {
-	pinMode(d0, OUTPUT);
-	pinMode(d1, OUTPUT);
-	pinMode(d2, OUTPUT);
-	pinMode(d3, OUTPUT);
+	for(int i = 0; i < _digitsCount; i++)
+		pinMode(d[i], OUTPUT);
 
-	_digit0 = d0;
-	_digit1 = d1;
-	_digit2 = d2;
-	_digit3 = d3;
+	_pinsDigit = d;
+}
+
+void Segment::setDigitCount(uint count)
+{
+	_digitsCount = count;
 }
 
 void Segment::setNumber(int number, bool showZero)
@@ -43,7 +45,7 @@ void Segment::setNumber(int number, bool showZero)
 			double refe = number / pow(10,i);
 			int digit = (int)refe;
 			_digits[i] = digit % 10;
-			if(_digits[i] == 0 && !showZero)
+			if(_digits[i] == 0 && !showZero && i != 0)
 				_digits[i] = -1;
 		}
 	}
@@ -57,14 +59,28 @@ void Segment::setDigits(int8_t d0, int8_t d1, int8_t d2, int8_t d3)
 	_digits[3] = d3;
 }
 
+void Segment::setDigit(int8_t number, uint position)
+{
+	_digits[position] = number;
+}
+
 void Segment::loop()
 {
 	if(_lastDigit + 5 < millis())
 	{
-		digitalWrite(_digit3, _currentDigit == 3);
-		digitalWrite(_digit2, _currentDigit == 2);
-		digitalWrite(_digit1, _currentDigit == 1);
-		digitalWrite(_digit0, _currentDigit == 0);
+		if(_useBCD)
+		{
+			for(int i = 0; i < 2; i++)
+			{
+				digitalWrite(_pinsDigit[i], _currentDigit & (0b1 << i));
+			}
+		} else {
+			for(int i = 0; i < _digitsCount; i++)
+			{
+				digitalWrite(_pinsDigit[i], i == _currentDigit);
+			}
+		}
+
 
 		int8_t digit = _digits[_currentDigit];
 		if(digit < 0)
@@ -72,13 +88,14 @@ void Segment::loop()
 			digit = 16 - digit;
 		}
 
-		digitalWrite(_pinA, _digits[_currentDigit] & 0b0001);
-		digitalWrite(_pinB, _digits[_currentDigit] & 0b0010);
-		digitalWrite(_pinC, _digits[_currentDigit] & 0b0100);
-		digitalWrite(_pinD, _digits[_currentDigit] & 0b1000);
+		for(int i = 0; i < 4; i++)
+		{
+			digitalWrite(_pinsInput[i], _digits[_currentDigit] & (0b1 << i));
+		}
+
 		
 		_currentDigit++;
-		_currentDigit = _currentDigit % 4;
+		_currentDigit = _currentDigit % _digitsCount;
 
 		if(digit == 15)
 			return;
