@@ -1,0 +1,26 @@
+{
+    "name": "BCD-Segment",
+    "version": "0.0.3",
+    "description": "Controls a BCD to 7-Segment IC. Supports up to 4 digits.",
+    "keywords": "bcd, binary, segment, digit",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/thewhobox/BCD-Segment.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Mike Gerst",
+        "email": "45664417+thewhobox@users.noreply.github.com",
+        "url": "https://github.com/thewhobox",
+        "maintainer": true
+      }
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/thewhobox",
+    "dependencies": {
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }
