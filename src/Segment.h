@@ -5,14 +5,14 @@ class Segment
 {
     public:
         Segment(bool useBCD = false);
-        Segment(uint digits, bool useBCD = false);
+        Segment(uint8_t digits, bool useBCD = false);
         void setInputPins(uint8_t a[]);
         void setDigitPins(uint8_t d[]);
-        void setDigitCount(uint count);
+        void setDigitCount(uint8_t count);
 
         void setNumber(int number, bool showZero = true);
         void setDigits(int8_t d0, int8_t d1 = 15, int8_t d2 = 15, int8_t d3 = 15);
-        void setDigit(int8_t number, uint position);
+        void setDigit(int8_t number, uint8_t position);
 
         void loop();
         

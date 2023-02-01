@@ -5,7 +5,7 @@ Segment::Segment(bool useBCD)
 	_useBCD = useBCD;
 }
 
-Segment::Segment(uint digits, bool useBCD)
+Segment::Segment(uint8_t digits, bool useBCD)
 {
 	_digitsCount = digits;
 	_useBCD = useBCD;
@@ -29,7 +29,7 @@ void Segment::setDigitPins(uint8_t *d)
 	_pinsDigit = d;
 }
 
-void Segment::setDigitCount(uint count)
+void Segment::setDigitCount(uint8_t count)
 {
 	_digitsCount = count;
 }
@@ -59,7 +59,7 @@ void Segment::setDigits(int8_t d0, int8_t d1, int8_t d2, int8_t d3)
 	_digits[3] = d3;
 }
 
-void Segment::setDigit(int8_t number, uint position)
+void Segment::setDigit(int8_t number, uint8_t position)
 {
 	_digits[position] = number;
 }
