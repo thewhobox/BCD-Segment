@@ -1,14 +1,13 @@
 #include "Segment.h"
 
-Segment::Segment(bool useBCD) 
+Segment::Segment() 
 {
-	_useBCD = useBCD;
+	_digitsCount = 4;;
 }
 
-Segment::Segment(uint8_t digits, bool useBCD)
+Segment::Segment(uint8_t digits)
 {
 	_digitsCount = digits;
-	_useBCD = useBCD;
 }
 
 void Segment::setInputPins(uint8_t *a)
@@ -64,21 +63,18 @@ void Segment::setDigit(int8_t number, uint8_t position)
 	_digits[position] = number;
 }
 
+void Segment::setSerial(SendOnlySoftwareSerial *ser)
+{
+	serial = ser;
+}
+
 void Segment::loop()
 {
-	if(_lastDigit + 5 < millis())
-	{
-		if(_useBCD)
+	//if(_lastDigit + 5 < millis())
+	//{
+		for(int i = 0; i < _digitsCount; i++)
 		{
-			for(int i = 0; i < 2; i++)
-			{
-				digitalWrite(_pinsDigit[i], _currentDigit & (0b1 << i));
-			}
-		} else {
-			for(int i = 0; i < _digitsCount; i++)
-			{
-				digitalWrite(_pinsDigit[i], i == _currentDigit);
-			}
+			digitalWrite(_pinsDigit[i], i == _currentDigit);
 		}
 
 
@@ -92,14 +88,15 @@ void Segment::loop()
 		{
 			digitalWrite(_pinsInput[i], _digits[_currentDigit] & (0b1 << i));
 		}
-
 		
 		_currentDigit++;
 		_currentDigit = _currentDigit % _digitsCount;
 
-		if(digit == 15)
-			return;
-
-		_lastDigit = millis();
-	}
+		delay(5);
+		//_lastDigit = millis();
+	//} else {
+	//	serial->print(_lastDigit);
+	//	serial->print(" ");
+	//	serial->println(millis());
+	//}
 }
